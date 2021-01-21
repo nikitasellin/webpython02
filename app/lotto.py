@@ -10,7 +10,7 @@ import config
 def prepare_to_print(player_card):
     card = dict(zip(player_card.positions, player_card.numbers))
     card_to_print = []
-    for i in range(config.FIELD_SIZE + 1):
+    for i in range(0, config.FIELD_SIZE):
         if i in card:
             if card[i] in player_card.crossed_numbers:
                 card_to_print.append('XX')
@@ -25,7 +25,7 @@ def prepare_to_print(player_card):
 
 def print_card(player_card):
     card_to_print = prepare_to_print(player_card)
-    # line size = field width * (2 characters per number + spase) + borders
+    # line size = field width * (2 characters per number + space) + borders
     line_size = config.FIELD_WIDTH * 3 + 3
     print("-" * line_size)
     first = 0

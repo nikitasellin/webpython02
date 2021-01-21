@@ -5,11 +5,10 @@ import config
 
 class RandomNumberGenerator:
     def __init__(self, min_num, max_num, count=None):
-        # Start from 1, not 0
-        max_num = max_num + 1
+        # Assumed start from 1, not 0
         if not count:
-            count = max_num - min_num
-        num_list = list(range(min_num, max_num))
+            count = max_num - min_num + 1
+        num_list = list(range(min_num, max_num + 1))
         shuffle(num_list)
         self._numbers = num_list[0: count]
 
@@ -30,28 +29,44 @@ class RandomNumberGenerator:
 
 class Card:
     def __init__(self):
-        self.numbers = []
-        self.crossed_numbers = []
-        self.positions = []
+        self._numbers = []
+        self._crossed_numbers = []
+        self._positions = []
         all_numbers = RandomNumberGenerator(
             1, 90, config.KEGS_PER_CARD).numbers
-        pos = 1
-        nums = 1
+        position = 0
+        index = 0
         for i in range(0, config.FIELD_HEIGHT):
-            line_positions = RandomNumberGenerator(
-                pos, pos + config.FIELD_WIDTH, config.KEGS_PER_LINE).numbers
-            line_positions.sort()
-            self.positions.extend(line_positions)
-            pos += config.FIELD_WIDTH
-            line_numbers = all_numbers[nums:nums + config.KEGS_PER_LINE]
+            per_line_positions = RandomNumberGenerator(
+                position,
+                # Starts from 0!
+                position + config.FIELD_WIDTH - 1,
+                config.KEGS_PER_LINE
+            ).numbers
+            per_line_positions.sort()
+            self._positions.extend(per_line_positions)
+            position += config.FIELD_WIDTH
+            line_numbers = all_numbers[index:index + config.KEGS_PER_LINE]
             line_numbers.sort()
-            self.numbers.extend(line_numbers)
-            nums += config.KEGS_PER_LINE
+            self._numbers.extend(line_numbers)
+            index += config.KEGS_PER_LINE
+
+    @property
+    def numbers(self):
+        return self._numbers
+
+    @property
+    def positions(self):
+        return self._positions
+
+    @property
+    def crossed_numbers(self):
+        return self._crossed_numbers
 
     def __sub__(self, number):
         if number not in self.numbers:
             raise ValueError(f'В карточке нет номера "{number}".')
-        self.crossed_numbers.append(number)
+        self._crossed_numbers.append(number)
         return self
 
 
