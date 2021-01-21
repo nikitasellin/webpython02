@@ -41,7 +41,7 @@ def print_card(player_card):
 
 class Game:
     def __init__(self):
-        self.randoms = RandomNumberGenerator(1, 90 + 1)
+        self.randoms = RandomNumberGenerator(1, 90)
         self.players = []
         self.step = 0
         self.keg = None

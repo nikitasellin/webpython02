@@ -5,6 +5,8 @@ import config
 
 class RandomNumberGenerator:
     def __init__(self, min_num, max_num, count=None):
+        # Start from 1, not 0
+        max_num = max_num + 1
         if not count:
             count = max_num - min_num
         num_list = list(range(min_num, max_num))
@@ -32,9 +34,9 @@ class Card:
         self.crossed_numbers = []
         self.positions = []
         all_numbers = RandomNumberGenerator(
-            1, 91, config.KEGS_PER_CARD).numbers
-        pos = 0
-        nums = 0
+            1, 90, config.KEGS_PER_CARD).numbers
+        pos = 1
+        nums = 1
         for i in range(0, config.FIELD_HEIGHT):
             line_positions = RandomNumberGenerator(
                 pos, pos + config.FIELD_WIDTH, config.KEGS_PER_LINE).numbers
