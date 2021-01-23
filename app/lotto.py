@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import os
 from time import sleep
 
 from classes import RandomNumberGenerator, Computer, Human
@@ -107,7 +107,12 @@ def main():
 
 
 if __name__ == "__main__":
+    run_tests = os.getenv('TEST', '')
+    if run_tests == 'yes':
+        os.system('python -m pytest tests/')
+        exit(0)
     try:
         main()
     except KeyboardInterrupt:
         print('Игра прервана пользователем.')
+        exit(1)
